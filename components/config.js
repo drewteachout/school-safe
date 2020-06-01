@@ -12,10 +12,19 @@ export const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center'
+		// justifyContent: 'center'
 	},
 	header: {
 		color: '#FFF',
 		backgroundColor: '#005B82'
+	},
+	input: {
+		margin: 0,
+		padding: 0
+	},
+	text: {
+		color: '#005B82',
+		fontSize: 14,
+		padding: 10
 	}
 });
