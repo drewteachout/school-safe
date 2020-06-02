@@ -9,10 +9,16 @@ export const screenOptions = {
 };
 
 export const styles = StyleSheet.create({
+	button: {
+		width: 125
+	},
+	buttonContainer: {
+		padding: 10
+	},
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		// justifyContent: 'center'
+		justifyContent: 'center'
 	},
 	header: {
 		color: '#FFF',

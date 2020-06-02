@@ -44,6 +44,7 @@ export function SurveyScreen({ navigation }) {
 
 	return (
 		<View>
+			<Input inputStyle={styles.input} label='School ID' />
 			<Input inputStyle={styles.input} label='Student Name' />
 			<Text style={styles.text}>Has your child experienced any of theses symptoms in the last 14 days? Please check all that apply.</Text>
 			<Divider style={{ backgroundColor: '#005B82'}} />
