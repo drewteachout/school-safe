@@ -30,9 +30,21 @@ export function SurveyScreen({ navigation }) {
 		});
 	}
 
+	const onSubmit = () => {
+		let finalState = {
+			name: 'test',
+			s0: state[0].checked,
+			s1: state[1].checked,
+			s2: state[2].checked,
+			s3: state[3].checked,
+			s4: state[4].checked
+		}
+		console.log('final state: ', finalState);
+	};
+
 	return (
 		<View>
-			<Input labelStyle={styles.input} containerStyle={styles.input} inputContainerStyle={styles.input} inputStyle={styles.input} label='Student Name' />
+			<Input inputStyle={styles.input} label='Student Name' />
 			<Text style={styles.text}>Has your child experienced any of theses symptoms in the last 14 days? Please check all that apply.</Text>
 			<Divider style={{ backgroundColor: '#005B82'}} />
 			{
@@ -47,7 +59,7 @@ export function SurveyScreen({ navigation }) {
 			}
 			<Button
 				title="Submit"
-				onPress={() => navigation.popToTop()}
+				onPress={() => { onSubmit(); navigation.popToTop() }}
 			/>
 		</View>
 	);
