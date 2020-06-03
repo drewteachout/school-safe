@@ -1,8 +1,31 @@
 import React, {useState} from 'react';
 import { View } from 'react-native';
 import { Button, CheckBox, Divider, Input, Text, ListItem } from 'react-native-elements';
+import firestore from '@react-native-firebase/firestore';
 
-import { styles } from './config';
+import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
+
+function addSurvey(state, schoolID, studentID) {
+	const timeStamp = firestore.FieldValue.serverTimestamp();
+
+	firestore()
+		.collection(SCHOOLS)
+		.doc(schoolID)
+		.collection(STUDENTS)
+		.doc(studentID)
+		.collection(SURVEY_RESULTS)
+		.add({
+			s0: state[0].checked,
+			s1: state[1].checked,
+			s2: state[2].checked,
+			s3: state[3].checked,
+			s4: state[4].checked,
+			submit_date: timeStamp
+		})
+		.then(() => {
+			console.log('Survey recorded!')
+		})
+}
 
 export function SurveyScreen({ navigation }) {
 	const [state, setState] = useState([
@@ -40,6 +63,7 @@ export function SurveyScreen({ navigation }) {
 			s4: state[4].checked
 		}
 		console.log('final state: ', finalState);
+		addSurvey(state, '0000', '00000000');
 	};
 
 	return (
