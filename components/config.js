@@ -1,5 +1,9 @@
 import { StyleSheet } from 'react-native';
 
+export const SCHOOLS = 'schools';
+export const SURVEY_RESULTS = 'survey_results';
+export const STUDENTS = 'students';
+
 export const screenOptions = {
 	title: 'School Safe',
 	headerStyle: {
