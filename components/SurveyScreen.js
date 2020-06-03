@@ -1,8 +1,38 @@
 import React, {useState} from 'react';
 import { View } from 'react-native';
 import { Button, CheckBox, Divider, Input, Text, ListItem } from 'react-native-elements';
+import firestore from '@react-native-firebase/firestore';
 
-import { styles } from './config';
+import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
+
+const schoolCollection = firestore().collection(SCHOOLS);
+
+function addSurvey(state, schoolID, studentID) {
+	const timeStamp = firestore.FieldValue.serverTimestamp();
+
+	schoolCollection.doc(schoolID)
+		.collection(STUDENTS)
+		.doc(studentID)
+		.update({
+			last_submit_date: timeStamp
+		});
+
+	schoolCollection.doc(schoolID)
+		.collection(STUDENTS)
+		.doc(studentID)
+		.collection(SURVEY_RESULTS)
+		.add({
+			s0: state[0].checked,
+			s1: state[1].checked,
+			s2: state[2].checked,
+			s3: state[3].checked,
+			s4: state[4].checked,
+			submit_date: timeStamp
+		})
+		.then(() => {
+			console.log('Survey recorded!')
+		});
+}
 
 export function SurveyScreen({ navigation }) {
 	const [state, setState] = useState([
@@ -30,9 +60,23 @@ export function SurveyScreen({ navigation }) {
 		});
 	}
 
+	const onSubmit = () => {
+		let finalState = {
+			name: 'test',
+			s0: state[0].checked,
+			s1: state[1].checked,
+			s2: state[2].checked,
+			s3: state[3].checked,
+			s4: state[4].checked
+		}
+		console.log('final state: ', finalState);
+		addSurvey(state, '0000', '00000000');
+	};
+
 	return (
 		<View>
-			<Input labelStyle={styles.input} containerStyle={styles.input} inputContainerStyle={styles.input} inputStyle={styles.input} label='Student Name' />
+			<Input inputStyle={styles.input} label='School ID' />
+			<Input inputStyle={styles.input} label='Student Name' />
 			<Text style={styles.text}>Has your child experienced any of theses symptoms in the last 14 days? Please check all that apply.</Text>
 			<Divider style={{ backgroundColor: '#005B82'}} />
 			{
@@ -47,7 +91,7 @@ export function SurveyScreen({ navigation }) {
 			}
 			<Button
 				title="Submit"
-				onPress={() => navigation.popToTop()}
+				onPress={() => { onSubmit(); navigation.popToTop() }}
 			/>
 		</View>
 	);
