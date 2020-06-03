@@ -5,12 +5,19 @@ import firestore from '@react-native-firebase/firestore';
 
 import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
 
+const schoolCollection = firestore().collection(SCHOOLS);
+
 function addSurvey(state, schoolID, studentID) {
 	const timeStamp = firestore.FieldValue.serverTimestamp();
 
-	firestore()
-		.collection(SCHOOLS)
-		.doc(schoolID)
+	schoolCollection.doc(schoolID)
+		.collection(STUDENTS)
+		.doc(studentID)
+		.update({
+			last_submit_date: timeStamp
+		});
+
+	schoolCollection.doc(schoolID)
 		.collection(STUDENTS)
 		.doc(studentID)
 		.collection(SURVEY_RESULTS)
@@ -24,7 +31,7 @@ function addSurvey(state, schoolID, studentID) {
 		})
 		.then(() => {
 			console.log('Survey recorded!')
-		})
+		});
 }
 
 export function SurveyScreen({ navigation }) {
