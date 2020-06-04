@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Button, CheckBox, Divider, Input, Text, ListItem } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 
 import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
+import { signOut } from '../utils/authentication';
 
 const schoolCollection = firestore().collection(SCHOOLS);
 
@@ -74,25 +75,36 @@ export function SurveyScreen({ navigation }) {
 	};
 
 	return (
-		<View>
-			<Input inputStyle={styles.input} label='School ID' />
-			<Input inputStyle={styles.input} label='Student Name' />
-			<Text style={styles.text}>Has your child experienced any of theses symptoms in the last 14 days? Please check all that apply.</Text>
-			<Divider style={{ backgroundColor: '#005B82'}} />
-			{
-				state.map((item, i) => (
-					<CheckBox
-						key={i}
-						title={item.text}
-						checked={item.checked}
-						onPress={() => changeState(i)}
-					/>
-				))
-			}
+		<ScrollView>
+			<View style={styles.surveyHeader}>
+			<Text h1 h1Style={styles.h1Style}>Survey</Text>
+			</View>
+			<View>
+				<Input label='School ID' />
+				<Input label='Student Name' />
+				<Divider style={{ backgroundColor: '#005B82'}} />
+				<Text style={styles.text}>Has your child experienced any of theses symptoms in the last 14 days? Please check all that apply.</Text>
+				<Divider style={{ backgroundColor: '#005B82'}} />
+				{
+					state.map((item, i) => (
+						<CheckBox
+							key={i}
+							title={item.text}
+							checked={item.checked}
+							onPress={() => changeState(i)}
+						/>
+					))
+				}
+			</View>
+			<View>
 			<Button
 				title="Submit"
-				onPress={() => { onSubmit(); navigation.popToTop() }}
+				onPress={() => { 
+					onSubmit();
+					navigation.popToTop();
+				}}
 			/>
-		</View>
+			</View>
+		</ScrollView>
 	);
 }

@@ -24,6 +24,10 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
+	h1Style: {
+		color: '#005B82',
+		padding: 30
+	},
 	header: {
 		color: '#FFF',
 		backgroundColor: '#005B82'
@@ -31,6 +35,18 @@ export const styles = StyleSheet.create({
 	input: {
 		margin: 0,
 		padding: 0
+	},
+	signOnHeader: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	signOnBody: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	surveyHeader: {
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	text: {
 		color: '#005B82',
