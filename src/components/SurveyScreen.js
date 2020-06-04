@@ -4,7 +4,6 @@ import { Button, CheckBox, Divider, Input, Text, ListItem } from 'react-native-e
 import firestore from '@react-native-firebase/firestore';
 
 import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
-import { signOut } from '../utils/authentication';
 
 const schoolCollection = firestore().collection(SCHOOLS);
 

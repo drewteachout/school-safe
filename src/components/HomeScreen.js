@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { Button } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
-import { signInAnonymously, signOut, signIn } from '../utils/authentication';
 import { styles } from './config';
 
 export function HomeScreen({ navigation }) {
@@ -20,33 +19,44 @@ export function HomeScreen({ navigation }) {
     return subscriber;
   });
 
+  function onParentsPress() {
+    if (!user) {
+      auth()
+        .signInAnonymously()
+        .then(() => {
+          console.log('User signed in anonymously.')
+        })
+        .catch(error => {
+          console.error(error);
+        })
+    } else if (!user.isAnonymous) {
+      auth().signOut();
+      signInAnonymously();
+    }
+    navigation.navigate('Survey');
+  }
+
+  function onAdminPress() {
+    if (!user || !user.isAnonymous) {
+      navigation.navigate('Admin');
+    } else {
+      navigation.navigate('SignOn');
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Button
         title="Parents"
         buttonStyle={styles.button}
-        onPress={() => {
-          if (!user) {
-            signInAnonymously();
-          } else if (!user.isAnonymous) {
-            signOut();
-            signInAnonymously();
-          }
-          navigation.navigate('Survey');
-        }}
+        onPress={() => onParentsPress()}
       />
       <Button
         title="Administrators"
         type="outline"
         buttonStyle={styles.button}
         containerStyle={styles.buttonContainer}
-        onPress={() => {
-          if (!user || !user.isAnonymous) {
-            navigation.navigate('Admin')
-          } else {
-            navigation.navigate('SignOn');
-          }
-        }}
+        onPress={() => onAdminPress()}
       />
     </View>
   );

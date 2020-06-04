@@ -1,40 +1,43 @@
 import React, {useState} from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
 
-import { signIn } from '../utils/authentication';
 import { isValidEmail } from '../utils/util';
 import { styles } from './config';
 
 export function SignOnScreen({ navigation }) {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const [fetching, setFetching] = useState(false)
 	const [emailError, setEmailError] = useState('')
 	const [passwordError, setPasswordError] = useState('')
-	const [isEmailValid, setEmailValid] = useState(true)
-	const [isPasswordValid, setPasswordValid] = useState(true)
+	const [error, setError] = useState('');
 
 	const doSignIn = () => {
 		let performSignIn = true;
 		if (!email) {
 			setEmailError('Email Required');
-			setEmailValid(false);
 			performSignIn = false;
 		} else if (!isValidEmail(email)) {
 			setEmailError('Invalid Email');
-			setEmailValid(false);
 			performSignIn = false;
 		} else if (!password && password.trim() && password.length > 6) {
 			setPasswordError('Weak password, minimum 6 chars')
-			setPasswordValid(false)
+			performSignIn = false
 		}
 
 		if (performSignIn) {
-			signIn(email, password);
-			setEmail('');
-			setPassword('');
-			navigation.navigate('Admin');
+			auth()
+				.signInWithEmailAndPassword(email, password)
+				.then(() => {
+					console.log('Authenticated successfully.');
+					navigation.navigate('Admin');
+				})
+				.catch(error => {
+					setEmail('');
+					setPassword('');
+					setError('Incorrect username and/or password');
+				})
 		}
 	}
 
@@ -50,8 +53,9 @@ export function SignOnScreen({ navigation }) {
 					leftIcon={{ type: 'font-awesome', name: 'envelope-o'}}
 					errorMessage={emailError}
 					onChangeText={email => {
-						setEmailError('')
-						setEmail(email)
+						setEmailError('');
+						setEmail(email);
+						setError('');
 					}}
 				/>
 				<Input
@@ -61,17 +65,22 @@ export function SignOnScreen({ navigation }) {
 					leftIcon={{ type: 'font-awesome', name: 'lock'}}
 					errorMessage={passwordError}
 					onChangeText={password => {
-						setPasswordValid('')
-						setPassword(password)
+						setPasswordError('');
+						setPassword(password);
+						setError('');
 					}}
 				/>
+			</View>
+			<View styles={styles.signOnBody}>
+				<Text style={styles.errorTextStyle}>{error}</Text>
 			</View>
 			<View>
 				<Button
 					title="Sign In"
+					containerStyle={{ padding: 25 }}
 					onPress={() => doSignIn(email, password)}
 				/>
 			</View>
 		</View>
-	)
+	);
 }

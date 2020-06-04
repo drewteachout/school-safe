@@ -24,6 +24,11 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
+	errorTextStyle: {
+		color: 'red',
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
 	h1Style: {
 		color: '#005B82',
 		padding: 30
