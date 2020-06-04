@@ -42,6 +42,10 @@ export function SurveyScreen({ navigation }) {
 		{ id: 3, text: 'Symptom D', checked: false },
 		{ id: 4, text: 'Symptom E', checked: false }
 	]);
+	const [name, setName] = useState('');
+	const [schoolID, setSchoolID] = useState('');
+	const [nameErrorMessage, setNameErrorMessage] = useState('');
+	const [schoolIDErrorMessage, setSchoolIDErrorMessage] = useState('');
 
 	// TODO: Implement state for name on form
 	// const [name, setName] = useState([])
@@ -70,17 +74,31 @@ export function SurveyScreen({ navigation }) {
 			s4: state[4].checked
 		}
 		console.log('final state: ', finalState);
-		addSurvey(state, '0000', '00000000');
+		addSurvey(state, schoolID, '00000000');
 	};
 
 	return (
 		<ScrollView>
 			<View style={styles.surveyHeader}>
-			<Text h1 h1Style={styles.h1Style}>Survey</Text>
+				<Text h1 h1Style={styles.h1Style}>Survey</Text>
 			</View>
 			<View>
-				<Input label='School ID' />
-				<Input label='Student Name' />
+				<Input 
+					label='School ID'
+					errorMessage={schoolIDErrorMessage}
+					onChangeText={schoolID => {
+						setSchoolIDErrorMessage('');
+						setSchoolID(schoolID);
+					}}
+				/>
+				<Input
+					label='Student Name'
+					errorMessage={nameErrorMessage}
+					onChangeText={name => {
+						setNameErrorMessage('');
+						setName(name);
+					}}
+					/>
 				<Divider style={{ backgroundColor: '#005B82'}} />
 				<Text style={styles.text}>Has your child experienced any of theses symptoms in the last 14 days? Please check all that apply.</Text>
 				<Divider style={{ backgroundColor: '#005B82'}} />
