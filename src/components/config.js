@@ -38,8 +38,7 @@ export const styles = StyleSheet.create({
 		backgroundColor: '#005B82'
 	},
 	input: {
-		margin: 0,
-		padding: 0
+		width: 145
 	},
 	signOnHeader: {
 		alignItems: 'center',

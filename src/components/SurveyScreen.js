@@ -7,34 +7,7 @@ import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
 
 const schoolCollection = firestore().collection(SCHOOLS);
 
-function addSurvey(state, schoolID, studentID) {
-	const timeStamp = firestore.FieldValue.serverTimestamp();
-
-	schoolCollection.doc(schoolID)
-		.collection(STUDENTS)
-		.doc(studentID)
-		.update({
-			last_submit_date: timeStamp
-		});
-
-	schoolCollection.doc(schoolID)
-		.collection(STUDENTS)
-		.doc(studentID)
-		.collection(SURVEY_RESULTS)
-		.add({
-			s0: state[0].checked,
-			s1: state[1].checked,
-			s2: state[2].checked,
-			s3: state[3].checked,
-			s4: state[4].checked,
-			submit_date: timeStamp
-		})
-		.then(() => {
-			console.log('Survey recorded!')
-		});
-}
-
-export function SurveyScreen({ navigation }) {
+export function SurveyScreen({ route, navigation }) {
 	const [state, setState] = useState([
 		{ id: 0, text: 'Symptom A', checked: false },
 		{ id: 1, text: 'Symptom B', checked: false },
@@ -43,12 +16,8 @@ export function SurveyScreen({ navigation }) {
 		{ id: 4, text: 'Symptom E', checked: false }
 	]);
 	const [name, setName] = useState('');
-	const [schoolID, setSchoolID] = useState('');
 	const [nameErrorMessage, setNameErrorMessage] = useState('');
-	const [schoolIDErrorMessage, setSchoolIDErrorMessage] = useState('');
-
-	// TODO: Implement state for name on form
-	// const [name, setName] = useState([])
+	const schoolID = route.params.schoolID;
 
 	const changeState = i => {
 		setState(prevState => {
@@ -64,18 +33,36 @@ export function SurveyScreen({ navigation }) {
 		});
 	}
 
-	const onSubmit = () => {
-		let finalState = {
-			name: 'test',
-			s0: state[0].checked,
-			s1: state[1].checked,
-			s2: state[2].checked,
-			s3: state[3].checked,
-			s4: state[4].checked
-		}
-		console.log('final state: ', finalState);
-		addSurvey(state, schoolID, '00000000');
-	};
+	function addSurvey() {
+		const timeStamp = firestore.FieldValue.serverTimestamp();
+		const studentID = '00000000';
+		console.log('Name: ', name);
+		console.log('StudentID: ', studentID);
+		console.log('SchoolID: ', schoolID)
+
+		schoolCollection.doc(schoolID)
+			.collection(STUDENTS)
+			.doc(studentID)
+			.update({
+				last_submit_date: timeStamp
+			});
+	
+		schoolCollection.doc(schoolID)
+			.collection(STUDENTS)
+			.doc(studentID)
+			.collection(SURVEY_RESULTS)
+			.add({
+				s0: state[0].checked,
+				s1: state[1].checked,
+				s2: state[2].checked,
+				s3: state[3].checked,
+				s4: state[4].checked,
+				submit_date: timeStamp
+			})
+			.then(() => {
+				console.log('Survey recorded!')
+			});
+	}
 
 	return (
 		<ScrollView>
@@ -83,14 +70,14 @@ export function SurveyScreen({ navigation }) {
 				<Text h1 h1Style={styles.h1Style}>Survey</Text>
 			</View>
 			<View>
-				<Input 
+				{/* <Input 
 					label='School ID'
 					errorMessage={schoolIDErrorMessage}
 					onChangeText={schoolID => {
 						setSchoolIDErrorMessage('');
 						setSchoolID(schoolID);
 					}}
-				/>
+				/> */}
 				<Input
 					label='Student Name'
 					errorMessage={nameErrorMessage}
@@ -117,7 +104,7 @@ export function SurveyScreen({ navigation }) {
 			<Button
 				title="Submit"
 				onPress={() => { 
-					onSubmit();
+					addSurvey();
 					navigation.popToTop();
 				}}
 			/>
