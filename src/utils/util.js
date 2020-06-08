@@ -4,7 +4,7 @@ export function isValidEmail(email) {
     return expression.test(String(email).toLowerCase())
 }
 
-export function hashCode(text) {
+export function nameHashCode(text) {
     let hash = 0;
     if (text.length == 0) {
         return hash
@@ -13,6 +13,6 @@ export function hashCode(text) {
         let char = text.charCodeAt(i);
         hash = ((hash<<5) - hash) + char;
         hash = hash & hash;
-    }
+    }   
     return hash;
 }

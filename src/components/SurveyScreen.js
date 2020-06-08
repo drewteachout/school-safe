@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import { ScrollView, View } from 'react-native';
-import { Button, CheckBox, Divider, Input, Text, ListItem } from 'react-native-elements';
+import { Button, CheckBox, Divider, Input, Overlay, Text } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 
-import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
+import { styles, getDayArray, getYearArray, MONTHS, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
+import { nameHashCode } from '../utils/util'
+import { getStudents } from '../utils/firebase';
 
 const schoolCollection = firestore().collection(SCHOOLS);
 
@@ -16,7 +18,10 @@ export function SurveyScreen({ route, navigation }) {
 		{ id: 4, text: 'Symptom E', checked: false }
 	]);
 	const [name, setName] = useState('');
-	const [nameErrorMessage, setNameErrorMessage] = useState('');
+	const [month, setMonth] = useState({month: 'January'});
+	const [day, setDay] = useState('');
+	const [year, setYear] = useState('');
+	const [visible, setVisible] = useState(false);
 	const schoolID = route.params.schoolID;
 
 	const changeState = i => {
@@ -35,60 +40,90 @@ export function SurveyScreen({ route, navigation }) {
 
 	function addSurvey() {
 		const timeStamp = firestore.FieldValue.serverTimestamp();
-		const studentID = '00000000';
+		const studentID = nameHashCode(name.toLowerCase() + month + day + year).toString();
 		console.log('Name: ', name);
-		console.log('StudentID: ', studentID);
-		console.log('SchoolID: ', schoolID)
+		console.log('DOB: ', month + '-' + day + '-' + year)
+		console.log('Student Hash: ', studentID);
 
-		schoolCollection.doc(schoolID)
-			.collection(STUDENTS)
-			.doc(studentID)
-			.update({
-				last_submit_date: timeStamp
+		getStudents(schoolID).then(students => {
+			let studentExists = false;
+			students.forEach(id => {
+				if (id.toString() === studentID) {
+					studentExists = true;
+					schoolCollection.doc(schoolID)
+						.collection(STUDENTS)
+						.doc(studentID)
+						.update({
+							last_submit_date: timeStamp
+						});
+
+					schoolCollection.doc(schoolID)
+						.collection(STUDENTS)
+						.doc(studentID)
+						.collection(SURVEY_RESULTS)
+						.add({
+							s0: state[0].checked,
+							s1: state[1].checked,
+							s2: state[2].checked,
+							s3: state[3].checked,
+							s4: state[4].checked,
+							submit_date: timeStamp
+						})
+						.then(() => {
+							console.log('Survey recorded!')
+						});
+					navigation.popToTop();
+				}
 			});
-	
-		schoolCollection.doc(schoolID)
-			.collection(STUDENTS)
-			.doc(studentID)
-			.collection(SURVEY_RESULTS)
-			.add({
-				s0: state[0].checked,
-				s1: state[1].checked,
-				s2: state[2].checked,
-				s3: state[3].checked,
-				s4: state[4].checked,
-				submit_date: timeStamp
-			})
-			.then(() => {
-				console.log('Survey recorded!')
-			});
+			if (!studentExists) {
+				setVisible(true);
+			}
+		})
 	}
 
 	return (
-		<ScrollView>
-			<View style={styles.surveyHeader}>
-				<Text h1 h1Style={styles.h1Style}>Survey</Text>
-			</View>
-			<View>
-				{/* <Input 
-					label='School ID'
-					errorMessage={schoolIDErrorMessage}
-					onChangeText={schoolID => {
-						setSchoolIDErrorMessage('');
-						setSchoolID(schoolID);
-					}}
-				/> */}
+		<ScrollView style={styles.root} contentContainerStyle={styles.rootContainer}>
+			<View styles={styles.rowContainer}>
 				<Input
+					containerStyle={{ paddingTop: 25 }}
 					label='Student Name'
-					errorMessage={nameErrorMessage}
+					labelStyle={styles.inputLabel}
 					onChangeText={name => {
-						setNameErrorMessage('');
 						setName(name);
 					}}
-					/>
-				<Divider style={{ backgroundColor: '#005B82'}} />
+				/>
+			</View>
+			<View style={{ alignSelf: 'flex-start', paddingLeft: 20 }}>
+				<Text h4 h4Style={styles.h4Style}>DATE OF BIRTH</Text>
+			</View>
+			<View style={styles.rowContainer} >
+				<Input
+					containerStyle={{ width: 90, paddingBottom: 0, marginBottom: 0 }}
+					label='Month'
+					placeholder={'mm'}
+					onChangeText={month => {
+						setMonth(month)
+					}}
+				/>
+				<Input
+					containerStyle={{ width: 90, paddingBottom: 0, marginBottom: 0 }}
+					label='Day'
+					placeholder={'dd'}
+					onChangeText={day => {
+						setDay(day)
+					}}
+				/>
+				<Input
+					containerStyle={{ width: 185, paddingBottom: 0, marginBottom: 0 }}
+					label='Year'
+					placeholder={'yyyy'}
+					onChangeText={year => {
+						setYear(year)
+					}}
+				/>
+			</View>
+			<View style={{ width: 350, paddingBottom: 20 }}>
 				<Text style={styles.text}>Has your child experienced any of theses symptoms in the last 14 days? Please check all that apply.</Text>
-				<Divider style={{ backgroundColor: '#005B82'}} />
 				{
 					state.map((item, i) => (
 						<CheckBox
@@ -100,15 +135,20 @@ export function SurveyScreen({ route, navigation }) {
 					))
 				}
 			</View>
-			<View>
 			<Button
 				title="Submit"
-				onPress={() => { 
-					addSurvey();
-					navigation.popToTop();
-				}}
+				containerStyle={{ width: 350, paddingBottom: 25 }}
+				onPress={() => { addSurvey(); }}
 			/>
-			</View>
+			<Overlay
+				isVisible={visible}
+				onBackdropPress={() => setVisible(false)}
+				overlayStyle={{ height: 150, width: 300 }}
+				>
+				<Text style={styles.text}>Student not found. Please check that Student Name 
+					and Date of Birth fields are correct. If still encountering issue contact administrator.</Text>
+				<Button title='Continue' style={styles.button} onPress={() => setVisible(false)}/>
+			</Overlay>
 		</ScrollView>
 	);
 }

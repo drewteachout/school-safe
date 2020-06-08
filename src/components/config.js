@@ -25,13 +25,19 @@ export const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	errorTextStyle: {
+		fontSize: 12,
 		color: 'red',
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
 	h1Style: {
 		color: '#005B82',
-		padding: 30
+		padding: 20
+	},
+	h4Style: {
+		color: '#005B82',
+		fontSize: 16,
+		padding: 10
 	},
 	header: {
 		color: '#FFF',
@@ -39,6 +45,23 @@ export const styles = StyleSheet.create({
 	},
 	input: {
 		width: 145
+	},
+	inputLabel: {
+		color: '#005B82',
+		width: 350,
+		textTransform: 'uppercase'
+	},
+	root: {
+		flex: 1
+	},
+	rootContainer: {
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	rowContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	signOnHeader: {
 		alignItems: 'center',
@@ -49,12 +72,13 @@ export const styles = StyleSheet.create({
 		justifyContent: 'center'
 	},
 	surveyHeader: {
+		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
 	text: {
 		color: '#005B82',
 		fontSize: 14,
-		padding: 10
+		paddingBottom: 20
 	}
 });
