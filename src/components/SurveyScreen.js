@@ -5,7 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 
 import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
 import { nameHashCode } from '../utils/util'
-import { getStudents } from '../utils/firebase';
+import { getStudents, getAnswerKey } from '../utils/firebase';
 
 const schoolCollection = firestore().collection(SCHOOLS);
 
@@ -18,6 +18,7 @@ export function SurveyScreen({ route, navigation }) {
 	const [visible, setVisible] = useState(false);
 	const schoolID = route.params.schoolID;
 	const questionID = route.params.questionID;
+	const answerKey = route.params.answerKey;
 
 	const changeState = i => {
 		setQuestions(prevQuestions => {
@@ -43,17 +44,23 @@ export function SurveyScreen({ route, navigation }) {
 		getStudents(schoolID).then(students => {
 			let studentExists = false;
 			students.forEach(id => {
+				console.log('ID: ', id);
 				if (id.toString() === studentID) {
 					studentExists = true;
+					let passing = true;
 					questions.forEach(question => {
 						answersArray.push(question.checked);
+						if (question.id >= answerKey.length || answerKey[question.id] != question.checked) {
+							passing = false;
+						}
 					})
 
 					schoolCollection.doc(schoolID)
 						.collection(STUDENTS)
 						.doc(studentID)
 						.update({
-							last_submit_date: timeStamp
+							last_submit_date: timeStamp,
+							passing: passing
 						});
 
 					schoolCollection.doc(schoolID)
@@ -62,6 +69,7 @@ export function SurveyScreen({ route, navigation }) {
 						.collection(SURVEY_RESULTS)
 						.add({
 							answers: answersArray,
+							passing: passing,
 							question_id: questionID,
 							submit_date: timeStamp
 						})

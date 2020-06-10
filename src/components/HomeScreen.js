@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
-import {  getQuestions, getQuestionID, getSchools, getAdminEmail } from '../utils/firebase';
+import { getQuestions, getQuestionID, getSchools, getAdminEmail, getAnswerKey } from '../utils/firebase';
 import { styles } from './config';
 
 export function HomeScreen({ navigation }) {
@@ -47,8 +47,12 @@ export function HomeScreen({ navigation }) {
               for (let i = 0; i < questions.length; i++) {
                 questionsArray.push({ id: i, text: questions[i], checked: false });
               }
-              // setQuestions(questionsArray);
-              navigation.navigate('Survey', { questionID: id, questions: questionsArray, schoolID: schoolID });
+              console.log('SchoolID: ', schoolID);
+	            console.log('QuestionID: ', id);
+              getAnswerKey(schoolID, id).then(answer_key => {
+                let answerKey = answer_key;
+                navigation.navigate('Survey', { questionID: id, answerKey: answerKey, questions: questionsArray, schoolID: schoolID });
+              });
             });
           })
         }

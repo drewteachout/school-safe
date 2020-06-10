@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 
-import { SCHOOLS, QUESTION_RECORD, STUDENTS } from '../components/config';
+import { SCHOOLS, QUESTION_RECORD, STUDENTS, SURVEY_RESULTS } from '../components/config';
 
 // Gets a list of all registered schools from the database
 export async function getSchools() {
@@ -28,9 +28,24 @@ export async function getAdminEmail(schoolID) {
 	return email;
 }
 
+export async function getAnswerKey(schoolID, questionID) {
+	let answer_key = [];
+	await firestore()
+		.collection(SCHOOLS)
+		.doc(schoolID)
+		.collection(QUESTION_RECORD)
+		.where('id', '==', questionID)
+		.get()
+		.then(querySnapshot => {
+			querySnapshot.forEach(documentSnapshot => {
+				answer_key = documentSnapshot.data().answer_key;
+			})
+		})
+	return answer_key;
+}
+
 export async function getQuestions(schoolID, questionID) {
 	let questions = [];
-	let id = 0;
 	await firestore()
 		.collection(SCHOOLS)
 		.doc(schoolID)
@@ -72,19 +87,33 @@ export async function getStudents(schoolID) {
 }
 
 export async function getClassifications(schoolID) {
-	let permittedStudents = [];
-	let bannedStudents = [];
+	let passingStudents = [];
+	let failingStudents = [];
 	let incompleteStudents = [];
-	
+
 	await firestore()
 		.collection(SCHOOLS)
 		.doc(schoolID)
 		.collection(STUDENTS)
 		.get()
 		.then(querySnapshot => {
+			const today = new Date();
 			querySnapshot.forEach(documentSnapshot => {
-				console.log('Name: ', documentSnapshot.data().name)
-				console.log('Last Submit Date: ', documentSnapshot.data().last_submit_date)
-			})
-		})
+				const month = documentSnapshot.data().last_submit_date.toDate().getMonth();
+				const date = documentSnapshot.data().last_submit_date.toDate().getDate();
+				const year = documentSnapshot.data().last_submit_date.toDate().getYear();
+				if (today.getDate() == date && today.getMonth() == month && today.getYear() == year) {
+					console.log('Name: ', documentSnapshot.data().name);
+					if (documentSnapshot.data().passing) {
+						passingStudents.push({ id: documentSnapshot.id, name: documentSnapshot.data().name});
+					} else {
+						failingStudents.push({ id: documentSnapshot.id, name: documentSnapshot.data().name});
+					}
+				} else {
+					incompleteStudents.push({ id: documentSnapshot.id, name: documentSnapshot.data().name });
+				}
+			});
+		});
+
+	return [passingStudents, failingStudents, incompleteStudents];
 }

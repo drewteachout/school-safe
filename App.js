@@ -8,6 +8,7 @@ import { HomeScreen } from './src/components/HomeScreen';
 import { SurveyScreen } from './src/components/SurveyScreen';
 import { AdminScreen } from './src/components/AdminScreen';
 import { SignOnScreen } from './src/components/SignOnScreen';
+import { StudentListScreen } from './src/components/StudentListScreen';
 
 const Stack = createStackNavigator();
 
@@ -15,11 +16,12 @@ function App() {
   return (
     <ThemeProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home" screenOptions={screenOptions}>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Survey" component={SurveyScreen} />
-          <Stack.Screen name="Admin" component={AdminScreen} />
-          <Stack.Screen name="SignOn" component={SignOnScreen} />
+        <Stack.Navigator initialRouteName='Home' screenOptions={screenOptions}>
+          <Stack.Screen name='Home' component={HomeScreen} />
+          <Stack.Screen name='Survey' component={SurveyScreen} />
+          <Stack.Screen name='Admin' component={AdminScreen} />
+          <Stack.Screen name='SignOn' component={SignOnScreen} />
+          <Stack.Screen name='StudentList' component={StudentListScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>
