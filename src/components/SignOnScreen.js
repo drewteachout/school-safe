@@ -5,7 +5,7 @@ import auth from '@react-native-firebase/auth';
 
 import { isValidEmail } from '../utils/util';
 import { styles } from './config';
-import { getAdmin } from '../utils/firebase';
+import { getAdminEmail } from '../utils/firebase';
 
 export function SignOnScreen({ route, navigation }) {
 	const [email, setEmail] = useState('')
@@ -28,7 +28,7 @@ export function SignOnScreen({ route, navigation }) {
 		}
 
 		if (performSignIn) {
-			getAdmin(route.params.schoolID).then(adminEmail => {
+			getAdminEmail(route.params.schoolID).then(adminEmail => {
 				if (email == adminEmail) {
 					auth()
 						.signInWithEmailAndPassword(email, password)

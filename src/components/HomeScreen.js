@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
-import {  getQuestions, getQuestionID, getSchools, getAdmin } from '../utils/firebase';
+import {  getQuestions, getQuestionID, getSchools, getAdminEmail } from '../utils/firebase';
 import { styles } from './config';
 
 export function HomeScreen({ navigation }) {
@@ -54,7 +54,11 @@ export function HomeScreen({ navigation }) {
         }
       });
       if (isError) {
-        setSchoolIDErrorMessage('The School ID you entered does not exist. Contact school administrator for valid school ID.');
+        if (schoolID == '') {
+          setSchoolIDErrorMessage('Please enter a School ID')
+        } else {
+          setSchoolIDErrorMessage('The School ID you entered does not exist. Contact school administrator for valid school ID.');
+        }
       }
     })
   }
@@ -66,7 +70,7 @@ export function HomeScreen({ navigation }) {
         if (schoolID == id) {
           isError = false;
           if (user && !user.isAnonymous) {
-            getAdmin(schoolID).then(email => {
+            getAdminEmail(schoolID).then(email => {
               if (email == user.email) {
                 navigation.navigate('Admin', { schoolID: schoolID });
               } else {
@@ -79,7 +83,11 @@ export function HomeScreen({ navigation }) {
         }
       });
       if (isError) {
-        setSchoolIDErrorMessage('The School ID you entered does not exist. Contact school administrator for valid school ID.');
+        if (schoolID == '') {
+          setSchoolIDErrorMessage('Please enter a School ID')
+        } else {
+          setSchoolIDErrorMessage('The School ID you entered does not exist. Contact school administrator for valid school ID.');
+        }
       }
     });
   }

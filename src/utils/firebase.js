@@ -16,7 +16,7 @@ export async function getSchools() {
 	return schools;
 }
 
-export async function getAdmin(schoolID) {
+export async function getAdminEmail(schoolID) {
 	let email = '';
 	await firestore()
 		.collection(SCHOOLS)
