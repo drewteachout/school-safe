@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
 import { isValidEmail } from '../utils/util';
 import { styles } from './config';
+import { getAdmin } from '../utils/firebase';
 
-export function SignOnScreen({ navigation }) {
+export function SignOnScreen({ route, navigation }) {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [emailError, setEmailError] = useState('')
@@ -21,23 +22,30 @@ export function SignOnScreen({ navigation }) {
 		} else if (!isValidEmail(email)) {
 			setEmailError('Invalid Email');
 			performSignIn = false;
-		} else if (!password && password.trim() && password.length > 6) {
-			setPasswordError('Weak password, minimum 6 chars')
-			performSignIn = false
+		} else if (password == '') {
+			setPasswordError('Password Required')
+			performSignIn = false;
 		}
 
 		if (performSignIn) {
-			auth()
-				.signInWithEmailAndPassword(email, password)
-				.then(() => {
-					console.log('Authenticated successfully.');
-					navigation.navigate('Admin');
-				})
-				.catch(error => {
+			getAdmin(route.params.schoolID).then(adminEmail => {
+				if (email == adminEmail) {
+					auth()
+						.signInWithEmailAndPassword(email, password)
+						.then(() => {
+							console.log('Authenticated successfully.');
+							navigation.navigate('Admin', { schoolID: route.params.schoolID });
+						})
+						.catch(error => {
+							setPassword('');
+							setPasswordError('Incorrect password');
+						})
+				} else {
 					setEmail('');
 					setPassword('');
-					setError('Incorrect username and/or password');
-				})
+					setEmailError('Incorrect email for school ' + route.params.schoolID);
+				}
+			});
 		}
 	}
 

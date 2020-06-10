@@ -1,17 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, Text, Button } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { styles } from './config';
 
-export function AdminScreen() {
+export function AdminScreen({ route, navigation }) {
+	const [permittedStudents, setPermittedStudents] = useState([]);
+	const [bannedStudents, setBannedStudents] = useState([]);
+	const [incompleteStudents, setIncompleteStudents] = useState([]);
+	const [user, setUser] = useState(route.params.user);
+
 	return (
 		<View>
 			<ListItem 
 				title="Permitted"
 				bottomDivider
 				chevron
-				badge={{ status: 'success', value: 75 }}
+				badge={{ status: 'success', value: permittedStudents.length }}
 			/>
 			<ListItem
 				title="Banned"

@@ -3,9 +3,9 @@ import { ScrollView, View } from 'react-native';
 import { Button, CheckBox, Input, Overlay, Text } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 
-import { styles, getDayArray, getYearArray, MONTHS, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
+import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
 import { nameHashCode } from '../utils/util'
-import { getStudents, getQuestions, getQuestionID } from '../utils/firebase';
+import { getStudents } from '../utils/firebase';
 
 const schoolCollection = firestore().collection(SCHOOLS);
 
@@ -37,9 +37,8 @@ export function SurveyScreen({ route, navigation }) {
 		const timeStamp = firestore.FieldValue.serverTimestamp();
 		const studentID = nameHashCode(name.toLowerCase() + month + day + year).toString();
 		let answersArray = [];
-		console.log('Name: ', name);
-		console.log('DOB: ', month + '-' + day + '-' + year)
-		console.log('Student Hash: ', studentID);
+
+		console.log('Student ID: ', studentID);
 
 		getStudents(schoolID).then(students => {
 			let studentExists = false;

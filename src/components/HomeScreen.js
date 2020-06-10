@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
-import {  getQuestions, getQuestionID, getSchools } from '../utils/firebase';
+import {  getQuestions, getQuestionID, getSchools, getAdmin } from '../utils/firebase';
 import { styles } from './config';
 
 export function HomeScreen({ navigation }) {
@@ -35,12 +35,13 @@ export function HomeScreen({ navigation }) {
   }
 
   function onParentsPress() {
-    getSchools().then(schools =>{
+    getSchools().then(schools => {
       let isError = true;
       schools.forEach(id => {
         if (schoolID == id) {
           isError = false;
           getQuestionID(schoolID).then(id => {
+            console.log('Id: ', id)
             getQuestions(schoolID, id).then(questions => {
               let questionsArray = [];
               for (let i = 0; i < questions.length; i++) {
@@ -59,11 +60,28 @@ export function HomeScreen({ navigation }) {
   }
 
   function onAdminPress() {
-    if (!user && !user.isAnonymous) {
-      navigation.navigate('Admin');
-    } else {
-      navigation.navigate('SignOn');
-    }
+    getSchools().then(schools => {
+      let isError = true;
+      schools.forEach(id => {
+        if (schoolID == id) {
+          isError = false;
+          if (user && !user.isAnonymous) {
+            getAdmin(schoolID).then(email => {
+              if (email == user.email) {
+                navigation.navigate('Admin', { schoolID: schoolID });
+              } else {
+                navigation.navigate('SignOn', { schoolID: schoolID });
+              }
+            });
+          } else {
+            navigation.navigate('SignOn', { schoolID: schoolID });
+          }
+        }
+      });
+      if (isError) {
+        setSchoolIDErrorMessage('The School ID you entered does not exist. Contact school administrator for valid school ID.');
+      }
+    });
   }
 
   return (
