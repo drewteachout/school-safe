@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+export const QUESTION_RECORD = 'question_record';
 export const SCHOOLS = 'schools';
 export const SURVEY_RESULTS = 'survey_results';
 export const STUDENTS = 'students';

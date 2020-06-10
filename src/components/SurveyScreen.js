@@ -1,46 +1,42 @@
 import React, {useState} from 'react';
 import { ScrollView, View } from 'react-native';
-import { Button, CheckBox, Divider, Input, Overlay, Text } from 'react-native-elements';
+import { Button, CheckBox, Input, Overlay, Text } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 
 import { styles, getDayArray, getYearArray, MONTHS, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
 import { nameHashCode } from '../utils/util'
-import { getStudents } from '../utils/firebase';
+import { getStudents, getQuestions, getQuestionID } from '../utils/firebase';
 
 const schoolCollection = firestore().collection(SCHOOLS);
 
 export function SurveyScreen({ route, navigation }) {
-	const [state, setState] = useState([
-		{ id: 0, text: 'Symptom A', checked: false },
-		{ id: 1, text: 'Symptom B', checked: false },
-		{ id: 2, text: 'Symptom C', checked: false },
-		{ id: 3, text: 'Symptom D', checked: false },
-		{ id: 4, text: 'Symptom E', checked: false }
-	]);
+	const [questions, setQuestions] = useState(route.params.questions);
 	const [name, setName] = useState('');
-	const [month, setMonth] = useState({month: 'January'});
+	const [month, setMonth] = useState('');
 	const [day, setDay] = useState('');
 	const [year, setYear] = useState('');
 	const [visible, setVisible] = useState(false);
 	const schoolID = route.params.schoolID;
+	const questionID = route.params.questionID;
 
 	const changeState = i => {
-		setState(prevState => {
-			var newState =[];
-			prevState.map(item => {
+		setQuestions(prevQuestions => {
+			var newQuestions =[];
+			prevQuestions.map(item => {
 				if (item.id == i) {
-					newState.push({ id: item.id, text: item.text, checked: !item.checked});
+					newQuestions.push({ id: item.id, text: item.text, checked: !item.checked});
 				} else {
-					newState.push({ id: item.id, text: item.text, checked: item.checked});
+					newQuestions.push({ id: item.id, text: item.text, checked: item.checked});
 				}
 			})
-			return newState;
+			return newQuestions;
 		});
 	}
 
 	function addSurvey() {
 		const timeStamp = firestore.FieldValue.serverTimestamp();
 		const studentID = nameHashCode(name.toLowerCase() + month + day + year).toString();
+		let answersArray = [];
 		console.log('Name: ', name);
 		console.log('DOB: ', month + '-' + day + '-' + year)
 		console.log('Student Hash: ', studentID);
@@ -50,6 +46,10 @@ export function SurveyScreen({ route, navigation }) {
 			students.forEach(id => {
 				if (id.toString() === studentID) {
 					studentExists = true;
+					questions.forEach(question => {
+						answersArray.push(question.checked);
+					})
+
 					schoolCollection.doc(schoolID)
 						.collection(STUDENTS)
 						.doc(studentID)
@@ -62,11 +62,8 @@ export function SurveyScreen({ route, navigation }) {
 						.doc(studentID)
 						.collection(SURVEY_RESULTS)
 						.add({
-							s0: state[0].checked,
-							s1: state[1].checked,
-							s2: state[2].checked,
-							s3: state[3].checked,
-							s4: state[4].checked,
+							answers: answersArray,
+							question_id: questionID,
 							submit_date: timeStamp
 						})
 						.then(() => {
@@ -123,9 +120,9 @@ export function SurveyScreen({ route, navigation }) {
 				/>
 			</View>
 			<View style={{ width: 350, paddingBottom: 20 }}>
-				<Text style={styles.text}>Has your child experienced any of theses symptoms in the last 14 days? Please check all that apply.</Text>
+				<Text style={styles.text}>Has your child had any of these experiences in the last 14 days? Please check all that apply.</Text>
 				{
-					state.map((item, i) => (
+					questions.map((item, i) => (
 						<CheckBox
 							key={i}
 							title={item.text}
