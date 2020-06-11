@@ -149,9 +149,11 @@ export function SurveyScreen({ route, navigation }) {
 				onBackdropPress={() => setVisible(false)}
 				overlayStyle={{ height: 150, width: 300 }}
 				>
-				<Text style={styles.text}>Student not found. Please check that Student Name 
-					and Date of Birth fields are correct. If still encountering issue contact administrator.</Text>
-				<Button title='Continue' style={styles.button} onPress={() => setVisible(false)}/>
+				<View>
+					<Text style={styles.text}>Student not found. Please check that Student Name 
+						and Date of Birth fields are correct. If still encountering issue contact administrator.</Text>
+					<Button title='Continue' style={styles.button} onPress={() => setVisible(false)}/>
+				</View>
 			</Overlay>
 		</ScrollView>
 	);
