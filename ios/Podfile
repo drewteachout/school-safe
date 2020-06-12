@@ -79,6 +79,10 @@ target 'SchoolSafe' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Firestore'
+
   target 'SchoolSafeTests' do
     inherit! :complete
     # Pods for testing

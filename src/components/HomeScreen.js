@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
@@ -97,28 +97,30 @@ export function HomeScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <Input
-          containerStyle={styles.input}
-					label='School ID'
-					errorMessage={schoolIDErrorMessage}
-					onChangeText={schoolID => {
-						setSchoolIDErrorMessage('');
-						setSchoolID(schoolID);
-					}}
-				/>
-      <Button
-        title="Parents"
-        buttonStyle={styles.button}
-        onPress={() => onParentsPress()}
-      />
-      <Button
-        title="Administrators"
-        type="outline"
-        buttonStyle={styles.button}
-        containerStyle={styles.buttonContainer}
-        onPress={() => onAdminPress()}
-      />
-    </View>
+    <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}} accessible={false}>
+      <View style={styles.container}>
+        <Input
+            containerStyle={styles.input}
+            label='School ID'
+            errorMessage={schoolIDErrorMessage}
+            onChangeText={schoolID => {
+              setSchoolIDErrorMessage('');
+              setSchoolID(schoolID);
+            }}
+          />
+        <Button
+          title="Parents"
+          buttonStyle={styles.button}
+          onPress={() => onParentsPress()}
+        />
+        <Button
+          title="Admin"
+          type="outline"
+          buttonStyle={styles.button}
+          containerStyle={styles.buttonContainer}
+          onPress={() => onAdminPress()}
+        />
+      </View>
+   </TouchableWithoutFeedback>
   );
 }

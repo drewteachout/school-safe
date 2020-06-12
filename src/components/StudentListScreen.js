@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
-import { Button, ListItem } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 
 export function StudentListScreen({ route, navigation }) {
   const students = route.params.students;

@@ -1,7 +1,8 @@
-import * as React from 'react'
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ThemeProvider } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { screenOptions } from './src/components/config';
 import { HomeScreen } from './src/components/HomeScreen';
@@ -11,6 +12,8 @@ import { SignOnScreen } from './src/components/SignOnScreen';
 import { StudentListScreen } from './src/components/StudentListScreen';
 
 const Stack = createStackNavigator();
+
+Icon.loadFont();
 
 function App() {
   return (

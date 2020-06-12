@@ -12,11 +12,8 @@ export function AdminScreen({ route, navigation }) {
 
 	if (initialzing) {
 		getClassifications(route.params.schoolID).then(data => {
-			console.log('Passing: ', data[0]);
 			setPassingStudents(data[0]);
-			console.log('Failing: ', data[1]);
 			setFailingStudents(data[1]);
-			console.log('Incomplete: ', data[2]);
 			setIncompleteStudents(data[2]);
 		});
 		setInitializing(false);
@@ -27,7 +24,7 @@ export function AdminScreen({ route, navigation }) {
 			<ListItem 
 				title="Pass"
 				bottomDivider
-				chevron
+				chevron={{ type: 'font-awesome', name: 'chevron-right' }}
 				badge={{ status: 'success', value: passingStudents.length }}
 				onPress={() => {
 					navigation.navigate('StudentList', { students: passingStudents })
@@ -36,7 +33,7 @@ export function AdminScreen({ route, navigation }) {
 			<ListItem
 				title="Fail"
 				bottomDivider
-				chevron
+				chevron={{ type: 'font-awesome', name: 'chevron-right' }}
 				badge={{ status: 'error', value: failingStudents.length }}
 				onPress={() => {
 					navigation.navigate('StudentList', { students: failingStudents })
@@ -45,7 +42,7 @@ export function AdminScreen({ route, navigation }) {
 			<ListItem
 				title="Incomplete"
 				bottomDivider
-				chevron
+				chevron={{ type: 'font-awesome', name: 'chevron-right' }}
 				badge={{ status: 'warning', value: incompleteStudents.length }}
 				onPress={() => {
 					navigation.navigate('StudentList', { students: incompleteStudents })

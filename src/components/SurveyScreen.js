@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import { ScrollView, View } from 'react-native';
+import { Keyboard, ScrollView, TouchableWithoutFeedback, View } from 'react-native';
 import { Button, CheckBox, Input, Overlay, Text } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 
 import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
 import { nameHashCode } from '../utils/util'
-import { getStudents, getAnswerKey } from '../utils/firebase';
+import { getStudents } from '../utils/firebase';
 
 const schoolCollection = firestore().collection(SCHOOLS);
 
@@ -86,75 +86,78 @@ export function SurveyScreen({ route, navigation }) {
 	}
 
 	return (
-		<ScrollView style={styles.root} contentContainerStyle={styles.rootContainer}>
-			<View styles={styles.rowContainer}>
-				<Input
-					containerStyle={{ paddingTop: 25 }}
-					label='Student Name'
-					labelStyle={styles.inputLabel}
-					onChangeText={name => {
-						setName(name);
-					}}
-				/>
-			</View>
-			<View style={{ alignSelf: 'flex-start', paddingLeft: 20 }}>
-				<Text h4 h4Style={styles.h4Style}>DATE OF BIRTH</Text>
-			</View>
-			<View style={styles.rowContainer} >
-				<Input
-					containerStyle={{ width: 90, paddingBottom: 0, marginBottom: 0 }}
-					label='Month'
-					placeholder={'mm'}
-					onChangeText={month => {
-						setMonth(month)
-					}}
-				/>
-				<Input
-					containerStyle={{ width: 90, paddingBottom: 0, marginBottom: 0 }}
-					label='Day'
-					placeholder={'dd'}
-					onChangeText={day => {
-						setDay(day)
-					}}
-				/>
-				<Input
-					containerStyle={{ width: 185, paddingBottom: 0, marginBottom: 0 }}
-					label='Year'
-					placeholder={'yyyy'}
-					onChangeText={year => {
-						setYear(year)
-					}}
-				/>
-			</View>
-			<View style={{ width: 350, paddingBottom: 20 }}>
-				<Text style={styles.text}>Has your child had any of these experiences in the last 14 days? Please check all that apply.</Text>
-				{
-					questions.map((item, i) => (
-						<CheckBox
-							key={i}
-							title={item.text}
-							checked={item.checked}
-							onPress={() => changeState(i)}
-						/>
-					))
-				}
-			</View>
-			<Button
-				title="Submit"
-				containerStyle={{ width: 350, paddingBottom: 25 }}
-				onPress={() => { addSurvey(); }}
-			/>
-			<Overlay
-				isVisible={visible}
-				onBackdropPress={() => setVisible(false)}
-				overlayStyle={{ height: 150, width: 300 }}
-				>
-				<View>
-					<Text style={styles.text}>Student not found. Please check that Student Name 
-						and Date of Birth fields are correct. If still encountering issue contact administrator.</Text>
-					<Button title='Continue' style={styles.button} onPress={() => setVisible(false)}/>
+		<TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}} accessible={false}>
+			<ScrollView style={styles.root} contentContainerStyle={styles.rootContainer}>
+				<View styles={styles.rowContainer}>
+					<Input
+						autoCapitalize='words'
+						containerStyle={{ paddingTop: 25 }}
+						label='Student Name'
+						labelStyle={styles.inputLabel}
+						onChangeText={name => {
+							setName(name);
+						}}
+					/>
 				</View>
-			</Overlay>
-		</ScrollView>
+				<View style={{ alignSelf: 'flex-start', paddingLeft: 20 }}>
+					<Text h4 h4Style={styles.h4Style}>DATE OF BIRTH</Text>
+				</View>
+				<View style={styles.rowContainer} >
+					<Input
+						containerStyle={{ width: 90, paddingBottom: 0, marginBottom: 0 }}
+						label='Month'
+						placeholder={'mm'}
+						onChangeText={month => {
+							setMonth(month)
+						}}
+					/>
+					<Input
+						containerStyle={{ width: 90, paddingBottom: 0, marginBottom: 0 }}
+						label='Day'
+						placeholder={'dd'}
+						onChangeText={day => {
+							setDay(day)
+						}}
+					/>
+					<Input
+						containerStyle={{ width: 185, paddingBottom: 0, marginBottom: 0 }}
+						label='Year'
+						placeholder={'yyyy'}
+						onChangeText={year => {
+							setYear(year)
+						}}
+					/>
+				</View>
+				<View style={{ width: 350, paddingBottom: 20 }}>
+					<Text style={styles.text}>Has your child had any of these experiences in the last 14 days? Please check all that apply.</Text>
+					{
+						questions.map((item, i) => (
+							<CheckBox
+								key={i}
+								title={item.text}
+								checked={item.checked}
+								onPress={() => changeState(i)}
+							/>
+						))
+					}
+				</View>
+				<Button
+					title="Submit"
+					containerStyle={{ width: 350, paddingBottom: 25 }}
+					onPress={() => { addSurvey(); }}
+				/>
+				<Overlay
+					isVisible={visible}
+					onBackdropPress={() => setVisible(false)}
+					overlayStyle={{ height: 150, width: 300 }}
+					>
+					<View>
+						<Text style={styles.text}>Student not found. Please check that Student Name 
+							and Date of Birth fields are correct. If still encountering issue contact administrator.</Text>
+						<Button title='Continue' style={styles.button} onPress={() => setVisible(false)}/>
+					</View>
+				</Overlay>
+			</ScrollView>
+		</TouchableWithoutFeedback>
 	);
 }
