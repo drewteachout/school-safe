@@ -86,6 +86,41 @@ export async function getStudents(schoolID) {
 	return students;
 }
 
+export async function getStudentData(schoolID, studentID) {
+	let oldResults = [];
+	let answers = []
+	let lastSubmitDate = null;
+	let questionID = null;
+	await firestore()
+		.collection(SCHOOLS)
+		.doc(schoolID)
+		.collection(STUDENTS)
+		.doc(studentID)
+		.collection(SURVEY_RESULTS)
+		.orderBy('submit_date', 'desc')
+		.get()
+		.then(querySnapshot => {
+			let i = 0;
+			querySnapshot.forEach(documentSnapshot => {
+				if (i == 0) {
+					answers = documentSnapshot.data().answers;
+					lastSubmitDate = documentSnapshot.data().submit_date;
+					questionID = documentSnapshot.data().question_id;
+				} else {
+					oldResults.push(documentSnapshot.data());
+				}
+				i++;
+			})
+		});
+		
+	return {
+		answers: answers,
+		lastSubmitDate: lastSubmitDate,
+		questionID: questionID,
+		oldResults: oldResults
+	};
+}
+
 export async function getClassifications(schoolID) {
 	let passingStudents = [];
 	let failingStudents = [];

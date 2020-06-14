@@ -9,7 +9,8 @@ import { HomeScreen } from './src/components/HomeScreen';
 import { SurveyScreen } from './src/components/SurveyScreen';
 import { AdminScreen } from './src/components/AdminScreen';
 import { SignOnScreen } from './src/components/SignOnScreen';
-import { StudentListScreen } from './src/components/StudentListScreen';
+import { ListScreen } from './src/components/ListScreen';
+import { DetailScreen } from './src/components/DetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -24,7 +25,8 @@ function App() {
           <Stack.Screen name='Survey' component={SurveyScreen} />
           <Stack.Screen name='Admin' component={AdminScreen} />
           <Stack.Screen name='SignOn' component={SignOnScreen} />
-          <Stack.Screen name='StudentList' component={StudentListScreen} />
+          <Stack.Screen name='List' component={ListScreen} />
+          <Stack.Screen name='Details' component={DetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

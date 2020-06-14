@@ -35,6 +35,10 @@ export const styles = StyleSheet.create({
 		color: '#005B82',
 		padding: 20
 	},
+	h3Style: {
+		color: '#005B82',
+		fontSize: 24
+	},
 	h4Style: {
 		color: '#005B82',
 		fontSize: 16,
@@ -59,6 +63,11 @@ export const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
+	row: {
+		flexDirection: 'row',
+		padding: 10,
+		alignItems: 'center'
+	},
 	rowContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -81,5 +90,11 @@ export const styles = StyleSheet.create({
 		color: '#005B82',
 		fontSize: 14,
 		paddingBottom: 20
+	},
+	textLabel: {
+		color: '#005B82',
+		fontSize: 24,
+		fontWeight: 'bold',
+		textTransform: 'uppercase'
 	}
 });
