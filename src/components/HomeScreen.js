@@ -41,14 +41,11 @@ export function HomeScreen({ navigation }) {
         if (schoolID == id) {
           isError = false;
           getQuestionID(schoolID).then(id => {
-            console.log('Id: ', id)
             getQuestions(schoolID, id).then(questions => {
               let questionsArray = [];
               for (let i = 0; i < questions.length; i++) {
                 questionsArray.push({ id: i, text: questions[i], checked: false });
               }
-              console.log('SchoolID: ', schoolID);
-	            console.log('QuestionID: ', id);
               getAnswerKey(schoolID, id).then(answer_key => {
                 let answerKey = answer_key;
                 navigation.navigate('Survey', { questionID: id, answerKey: answerKey, questions: questionsArray, schoolID: schoolID });

@@ -138,7 +138,6 @@ export async function getClassifications(schoolID) {
 				const date = documentSnapshot.data().last_submit_date.toDate().getDate();
 				const year = documentSnapshot.data().last_submit_date.toDate().getYear();
 				if (today.getDate() == date && today.getMonth() == month && today.getYear() == year) {
-					console.log('Name: ', documentSnapshot.data().name);
 					if (documentSnapshot.data().passing) {
 						passingStudents.push({ id: documentSnapshot.id, name: documentSnapshot.data().name});
 					} else {

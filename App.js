@@ -11,6 +11,8 @@ import { AdminScreen } from './src/components/AdminScreen';
 import { SignOnScreen } from './src/components/SignOnScreen';
 import { ListScreen } from './src/components/ListScreen';
 import { DetailScreen } from './src/components/DetailScreen';
+import { PastListScreen } from './src/components/PastListScreen';
+import { PastDetailScreen } from './src/components/PastDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +29,8 @@ function App() {
           <Stack.Screen name='SignOn' component={SignOnScreen} />
           <Stack.Screen name='List' component={ListScreen} />
           <Stack.Screen name='Details' component={DetailScreen} />
+          <Stack.Screen name='PastList' component={PastListScreen} />
+          <Stack.Screen name='PastDetails' component={PastDetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

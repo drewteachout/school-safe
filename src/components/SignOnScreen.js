@@ -39,7 +39,6 @@ export function SignOnScreen({ route, navigation }) {
 					auth()
 						.signInWithEmailAndPassword(email, password)
 						.then(() => {
-							console.log('Authenticated successfully.');
 							navigation.navigate('Admin', { schoolID: route.params.schoolID });
 						})
 						.catch(error => {

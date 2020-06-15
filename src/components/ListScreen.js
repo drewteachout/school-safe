@@ -16,7 +16,7 @@ export function ListScreen({ route, navigation }) {
             responses.push({ id: i, text: questions[i], checked: student.answers[i]})
           }
         } else {
-          console.error('Questions and Answers do not match up');
+          console.error('Questions and Answers do not match up. Please contact support.');
         }
         navigation.navigate('Details', {
           color: route.params.color,

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { CheckBox, Icon, ListItem, Text } from 'react-native-elements';
+import { CheckBox, Icon, Text } from 'react-native-elements';
 
 import { styles } from './config';
 
-export function DetailScreen({ route, navigation }) {
+export function PastDetailScreen({ route, navigation }) {
   const [name, setName] = useState(route.params.name);
   const [lastSubmitDate, setLastSubmitDate] = useState(route.params.lastSubmitDate);
   const [surveyResults, setSurveyResults] = useState(route.params.surveyResults);
-  const [oldResults, setOldResults] = useState(route.params.oldResults);
 
   return (
     <View>
@@ -35,15 +34,6 @@ export function DetailScreen({ route, navigation }) {
           })
         }
       </ScrollView>
-      <ListItem 
-        style={{ marginTop: 20 }}
-        title='Past Survey Results'
-        bottomDivider
-        chevron={{ type: 'font-awesome', name: 'chevron-right' }}
-        onPress={() => {
-          navigation.navigate('PastList', { name: name, oldResults: oldResults, studentID: route.params.studentID });
-        }}
-      />
     </View>
   );
 }
