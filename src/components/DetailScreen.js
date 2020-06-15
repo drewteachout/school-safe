@@ -22,7 +22,7 @@ export function DetailScreen({ route, navigation }) {
         <Text style={{ fontSize: 18 }}>{lastSubmitDate}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={styles.textLabel}>Survey Responses:</Text>
+        <Text style={styles.textLabel}>Last Survey Response:</Text>
       </View>
       <ScrollView style={{ padding: 10, height: 350 }}>
         {

@@ -16,6 +16,7 @@ export function SurveyScreen({ route, navigation }) {
 	const [day, setDay] = useState('');
 	const [year, setYear] = useState('');
 	const [visible, setVisible] = useState(false);
+	const [confirmationVisible, setConfirmationVisible] = useState(false);
 	const schoolID = route.params.schoolID;
 	const questionID = route.params.questionID;
 	const answerKey = route.params.answerKey;
@@ -70,9 +71,6 @@ export function SurveyScreen({ route, navigation }) {
 							question_id: questionID,
 							submit_date: timeStamp
 						})
-						.then(() => {
-							console.log('Survey recorded!')
-						});
 					navigation.popToTop();
 				}
 			});
@@ -141,7 +139,7 @@ export function SurveyScreen({ route, navigation }) {
 				<Button
 					title="Submit"
 					containerStyle={{ width: 350, paddingBottom: 25 }}
-					onPress={() => { addSurvey(); }}
+					onPress={() => { setConfirmationVisible(true); }}
 				/>
 				<Overlay
 					isVisible={visible}
@@ -152,6 +150,20 @@ export function SurveyScreen({ route, navigation }) {
 						<Text style={styles.text}>Student not found. Please check that Student Name 
 							and Date of Birth fields are correct. If still encountering issue contact administrator.</Text>
 						<Button title='Continue' style={styles.button} onPress={() => setVisible(false)}/>
+					</View>
+				</Overlay>
+				<Overlay
+					isVisible={confirmationVisible}
+					onBackdropPress={() => setConfirmationVisible(false)}
+					overlayStyle={{ height: 125, width: 300 }}
+					>
+					<View style={styles.rootContainer}>
+						<Text h3 h3Style={styles.h3Style}>Please Confirm</Text>
+						<Text>Is the information you entered correct?</Text>
+						<View style={styles.rowContainer}>
+							<Button containerStyle={styles.buttonContainer} title='Cancel' type='outline' onPress={() => setConfirmationVisible(false)}></Button>
+							<Button containerStyle={styles.buttonContainer} title='Submit' type='solid' onPress={() => {addSurvey(); setConfirmationVisible(false)}}></Button>
+						</View>
 					</View>
 				</Overlay>
 			</ScrollView>
