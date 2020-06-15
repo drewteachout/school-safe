@@ -27,7 +27,7 @@ export function AdminScreen({ route, navigation }) {
 				chevron={{ type: 'font-awesome', name: 'chevron-right' }}
 				badge={{ status: 'success', value: passingStudents.length }}
 				onPress={() => {
-					navigation.navigate('List', { color: '#52c41a', iconName: 'check', schoolID: route.params.schoolID, students: passingStudents })
+					navigation.navigate('List', { iconColor: '#52c41a', iconName: 'check', schoolID: route.params.schoolID, students: passingStudents })
 				}}
 			/>
 			<ListItem
@@ -36,7 +36,7 @@ export function AdminScreen({ route, navigation }) {
 				chevron={{ type: 'font-awesome', name: 'chevron-right' }}
 				badge={{ status: 'error', value: failingStudents.length }}
 				onPress={() => {
-					navigation.navigate('List', { color: '#ff190c', iconName: 'error', schoolID: route.params.schoolID, students: failingStudents })
+					navigation.navigate('List', { iconColor: '#ff190c', iconName: 'error', schoolID: route.params.schoolID, students: failingStudents })
 				}}
 			/>
 			<ListItem
@@ -45,7 +45,7 @@ export function AdminScreen({ route, navigation }) {
 				chevron={{ type: 'font-awesome', name: 'chevron-right' }}
 				badge={{ status: 'warning', value: incompleteStudents.length }}
 				onPress={() => {
-					navigation.navigate('List', { color: '#faad14', iconName: 'warning', schoolID: route.params.schoolID, students: incompleteStudents })
+					navigation.navigate('List', { iconColor: '#faad14', iconName: 'warning', schoolID: route.params.schoolID, students: incompleteStudents })
 				}}
 			/>
 		</View>
