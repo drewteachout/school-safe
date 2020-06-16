@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
-import { View } from 'react-native';
+import React, { useState, useLayoutEffect } from 'react';
+import { BackHandler, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import { useFocusEffect } from '@react-navigation/native';
+import { HeaderBackButton } from '@react-navigation/stack';
 
 import { getClassifications } from '../utils/firebase';
 
@@ -18,6 +20,30 @@ export function AdminScreen({ route, navigation }) {
 		});
 		setInitializing(false);
 	}
+
+	useLayoutEffect(() => {
+		navigation.setOptions({
+			headerLeft: () => (
+				<HeaderBackButton
+					onPress={() => navigation.popToTop()}
+					tintColor={'#FFF'}
+				/>
+			)
+		})
+	}, [navigation])
+
+	useFocusEffect(
+    React.useCallback(() => {
+			const onBackPress = () => {
+				navigation.popToTop();
+				return true;
+			}
+			BackHandler.addEventListener('hardwareBackPress', onBackPress);
+			return () => {
+				BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+			}
+    }, [])
+  );
 
 	return (
 		<View>
