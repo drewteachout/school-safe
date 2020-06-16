@@ -61,3 +61,6 @@ buck-out/
 # Google Services
 android/app/google-services.json
 ios/GoogleService-Info.plist
+
+# Gradle
+android/gradle.properties
