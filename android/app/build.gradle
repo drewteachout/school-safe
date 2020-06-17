@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.schoolsafe"
+        applicationId "com.yellowjacketsolutions.schoolsafe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

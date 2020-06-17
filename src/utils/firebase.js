@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 
-import { SCHOOLS, QUESTION_RECORD, STUDENTS, SURVEY_RESULTS } from '../components/config';
+import { QUESTION_RECORD, SCHOOLS, STUDENTS, SURVEY_RESULTS } from '../config';
 
 // Gets a list of all registered schools from the database
 export async function getSchools() {

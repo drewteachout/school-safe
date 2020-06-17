@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, View } from 'react-native';
 import { CheckBox, Icon, Text } from 'react-native-elements';
 
-import { styles } from './config';
+import { styles } from '../config';
 
 export function PastDetailScreen({ route }) {
 	return (

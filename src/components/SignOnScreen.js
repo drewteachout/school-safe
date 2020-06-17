@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
-import { isValidEmail } from '../utils/util';
-import { styles } from './config';
+import { styles } from '../config';
 import { getAdminEmail } from '../utils/firebase';
+import { isValidEmail } from '../utils/util';
 
 
 export function SignOnScreen({ route, navigation }) {

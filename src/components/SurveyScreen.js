@@ -3,7 +3,7 @@ import { Keyboard, ScrollView, TouchableWithoutFeedback, View } from 'react-nati
 import { Button, CheckBox, Input, Overlay, Text } from 'react-native-elements';
 import firestore from '@react-native-firebase/firestore';
 
-import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from './config';
+import { styles, SCHOOLS, STUDENTS, SURVEY_RESULTS } from '../config';
 import { nameHashCode } from '../utils/util'
 import { getStudents } from '../utils/firebase';
 

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Keyboard, TouchableWithoutFeedback, View } from 'react-native';
-import { Button, Input } from 'react-native-elements';
+import { Button, Image, Input } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
+import { styles } from '../config';
 import { getQuestions, getQuestionID, getSchools, getAdminEmail, getAnswerKey } from '../utils/firebase';
-import { styles } from './config';
 
 export function HomeScreen({ navigation }) {
   const [initializing, setInitializing] = useState(true);
@@ -22,7 +22,6 @@ export function HomeScreen({ navigation }) {
     return subscriber;
   });
 
-  // Sign in anonymously
   if (!user) {
     auth()
       .signInAnonymously()
@@ -96,15 +95,20 @@ export function HomeScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}} accessible={false}>
       <View style={styles.container}>
+        <Image 
+          source={require('../assets/school-safe-logo.png')}
+          style={{ width: 200, height: 200 }}
+          containerStyle={{ paddingBottom: 20 }}
+        />
         <Input
-            containerStyle={styles.input}
-            label='School ID'
-            errorMessage={schoolIDErrorMessage}
-            onChangeText={schoolID => {
-              setSchoolIDErrorMessage('');
-              setSchoolID(schoolID);
-            }}
-          />
+          containerStyle={styles.input}
+          label='School ID'
+          errorMessage={schoolIDErrorMessage}
+          onChangeText={schoolID => {
+            setSchoolIDErrorMessage('');
+            setSchoolID(schoolID);
+          }}
+        />
         <Button
           title="Parents"
           buttonStyle={styles.button}

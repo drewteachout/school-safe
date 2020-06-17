@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ThemeProvider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { screenOptions } from './src/components/config';
+import { screenOptions } from './src/config';
 import { HomeScreen } from './src/components/HomeScreen';
 import { SurveyScreen } from './src/components/SurveyScreen';
 import { AdminScreen } from './src/components/AdminScreen';
