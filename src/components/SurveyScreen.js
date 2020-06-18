@@ -17,9 +17,6 @@ export function SurveyScreen({ route, navigation }) {
 	const [year, setYear] = useState('');
 	const [visible, setVisible] = useState(false);
 	const [confirmationVisible, setConfirmationVisible] = useState(false);
-	const schoolID = route.params.schoolID;
-	const questionID = route.params.questionID;
-	const answerKey = route.params.answerKey;
 
 	const changeState = i => {
 		setQuestions(prevQuestions => {
@@ -40,7 +37,7 @@ export function SurveyScreen({ route, navigation }) {
 		const studentID = nameHashCode(name.toLowerCase() + month + day + year).toString();
 		let answersArray = [];
 
-		getStudents(schoolID).then(students => {
+		getStudents(route.params.schoolID).then(students => {
 			let studentExists = false;
 			students.forEach(id => {
 				if (id.toString() === studentID) {
@@ -48,12 +45,12 @@ export function SurveyScreen({ route, navigation }) {
 					let passing = true;
 					questions.forEach(question => {
 						answersArray.push(question.checked);
-						if (question.id >= answerKey.length || answerKey[question.id] != question.checked) {
+						if (question.id >= route.params.answerKey.length || route.params.answerKey[question.id] != question.checked) {
 							passing = false;
 						}
 					})
 
-					schoolCollection.doc(schoolID)
+					schoolCollection.doc(route.params.schoolID)
 						.collection(STUDENTS)
 						.doc(studentID)
 						.update({
@@ -61,14 +58,14 @@ export function SurveyScreen({ route, navigation }) {
 							passing: passing,
 						});
 
-					schoolCollection.doc(schoolID)
+					schoolCollection.doc(route.params.schoolID)
 						.collection(STUDENTS)
 						.doc(studentID)
 						.collection(SURVEY_RESULTS)
 						.add({
 							answers: answersArray,
 							passing: passing,
-							question_id: questionID,
+							question_id: route.params.questionID,
 							submit_date: timeStamp
 						})
 					navigation.popToTop();
@@ -124,7 +121,7 @@ export function SurveyScreen({ route, navigation }) {
 					/>
 				</View>
 				<View style={{ width: 350, paddingBottom: 20 }}>
-					<Text style={styles.text}>Has your child had any of these experiences in the last 14 days? Please check all that apply.</Text>
+					<Text style={styles.text}>{route.params.surveyPrompt}</Text>
 					{
 						questions.map((item, i) => (
 							<CheckBox

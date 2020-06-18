@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
-import { getStudentData, getQuestions } from '../utils/firebase';
+import { getQuestionPrompt, getQuestions, getStudentData } from '../utils/firebase';
 import { toShortDate } from '../utils/util';
 
 export function ListScreen({ route, navigation }) {
@@ -16,15 +16,18 @@ export function ListScreen({ route, navigation }) {
 						responses.push({ id: i, text: questions[i], checked: student.answers[i]})
 					}
 				}
-				navigation.navigate('Details', {
-					iconColor: route.params.iconColor,
-					iconName: route.params.iconName,
-					lastSubmitDate: toShortDate(student.lastSubmitDate.toDate()),
-					name: name,
-					oldResults: student.oldResults,
-					schoolID: route.params.schoolID,
-					studentID: studentID,
-					surveyResults: responses
+				getQuestionPrompt(route.params.schoolID, student.questionID).then(prompt => {
+					navigation.navigate('Details', {
+						iconColor: route.params.iconColor,
+						iconName: route.params.iconName,
+						lastSubmitDate: toShortDate(student.lastSubmitDate.toDate()),
+						name: name,
+						oldResults: student.oldResults,
+						schoolID: route.params.schoolID,
+						studentID: studentID,
+						surveyResults: responses,
+						surveyPrompt: prompt
+					});
 				});
 			})
 		});

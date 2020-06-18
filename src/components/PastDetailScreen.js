@@ -19,7 +19,10 @@ export function PastDetailScreen({ route }) {
 			<View style={styles.row}>
 				<Text style={styles.textLabel}>Survey Response:</Text>
 			</View>
-			<ScrollView style={{ padding: 10, height: 350 }}>
+			<View style={styles.row}>
+				<Text style={styles.text}>{route.params.surveyPrompt}</Text>
+			</View>
+			<ScrollView style={{ height: 250 }}>
 				{
 					route.params.surveyResults.map((item, i) => {
 						return <CheckBox

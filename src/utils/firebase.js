@@ -72,6 +72,22 @@ export async function getQuestionID(schoolID) {
 	return id;
 }
 
+export async function getQuestionPrompt(schoolID, questionID) {
+	let prompt = ''
+	await firestore()
+		.collection(SCHOOLS)
+		.doc(schoolID)
+		.collection(QUESTION_RECORD)
+		.where('id', '==', questionID)
+		.get()
+		.then(querySnapshot => {
+			querySnapshot.forEach(documentSnapshot => {
+				prompt = documentSnapshot.data().prompt;
+			})
+		})
+	return prompt;
+}
+
 export async function getStudents(schoolID) {
 	let students = [];
 	await firestore()

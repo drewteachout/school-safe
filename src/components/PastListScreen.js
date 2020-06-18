@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
-import { getQuestions } from '../utils/firebase';
+import { getQuestions, getQuestionPrompt } from '../utils/firebase';
 import { toShortDate } from '../utils/util';
 
 export function PastListScreen({ route, navigation }) {
@@ -21,7 +21,9 @@ export function PastListScreen({ route, navigation }) {
 				iconColor = '#ff190c';
 				iconName = 'error';
 			}
-			navigation.navigate('PastDetails', { name: route.params.name, iconColor: iconColor, iconName: iconName, submitDate: submitDate, surveyResults: responses});
+			getQuestionPrompt(route.params.schoolID, questionID).then(prompt => {
+				navigation.navigate('PastDetails', { name: route.params.name, iconColor: iconColor, iconName: iconName, submitDate: submitDate, surveyResults: responses, surveyPrompt: prompt });
+			});
 		});
 	}
 

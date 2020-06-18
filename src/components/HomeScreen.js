@@ -4,7 +4,14 @@ import { Button, Image, Input } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 
 import { styles } from '../config';
-import { getQuestions, getQuestionID, getSchools, getAdminEmail, getAnswerKey } from '../utils/firebase';
+import {
+  getAdminEmail,
+  getAnswerKey,
+  getQuestionID,
+  getQuestionPrompt,
+  getQuestions,
+  getSchools
+  } from '../utils/firebase';
 
 export function HomeScreen({ navigation }) {
   const [initializing, setInitializing] = useState(true);
@@ -47,7 +54,9 @@ export function HomeScreen({ navigation }) {
               }
               getAnswerKey(schoolID, id).then(answer_key => {
                 let answerKey = answer_key;
-                navigation.navigate('Survey', { questionID: id, answerKey: answerKey, questions: questionsArray, schoolID: schoolID });
+                getQuestionPrompt(schoolID, id).then(prompt => {
+                  navigation.navigate('Survey', { answerKey: answerKey, questionID: id, questions: questionsArray, schoolID: schoolID, surveyPrompt: prompt });
+                })
               });
             });
           })
