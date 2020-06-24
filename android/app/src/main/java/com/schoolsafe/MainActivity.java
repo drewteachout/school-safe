@@ -1,4 +1,4 @@
-package com.yellowjacketsolutions.schoolsafe;
+package com.yellowjacketsolutionsllc.schoolsafe;
 
 import com.facebook.react.ReactActivity;
 
